@@ -1,0 +1,126 @@
+﻿@model DBConnection.Models.Registration
+
+@{
+    ViewData["Title"] = "Registration Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .custom-header {
+            background: linear-gradient(135deg, #1a252f, #2c3e50);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-8 col-sm-10">
+                <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+
+                    <div class="card-header text-white p-4 custom-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="flex-shrink-0">
+                                <img src="/Image/Logo.png" alt="Logo" style="height: 60px; width: auto; object-fit: contain;" />
+                            </div>
+                            <div>
+                                <h3 class="mb-0 fw-bold tracking-tight" style="color: #3498db;">Online Tuition System</h3>
+                                <p class="text-white-50 small mb-0">Create your account to join the network</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4 bg-white">
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger p-2 small mb-3">
+                                <div asp-validation-summary="All" class="mb-0"></div>
+                            </div>
+                        }
+
+                        <form asp-action="Create" method="post" autocomplete="off">
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">User Name</label>
+                                <input type="text" name="UserName" class="form-control border-secondary-subtle" placeholder="e.g. johndoe" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Email Address</label>
+                                <input type="email" name="Email" class="form-control border-secondary-subtle" placeholder="name@example.com" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Gender Identity</label>
+                                <select name="Gender" class="form-select border-secondary-subtle" required>
+                                    <option value="" disabled selected>Choose gender...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Contact Number</label>
+                                <input type="tel" name="ContactNumber" class="form-control border-secondary-subtle" placeholder="+1234567890" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Date of Birth</label>
+                                <input type="date" name="DOB" class="form-control border-secondary-subtle" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Assign System Role</label>
+                                <select name="Role" class="form-select border-secondary-subtle" required>
+                                    <option value="" disabled selected>Select system role...</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Tutor">Tutor</option>
+                                    <option value="Teacher">Teacher</option>
+                                    <option value="Student">Student</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Physical Address</label>
+                                <textarea name="Address" class="form-control border-secondary-subtle" rows="2" placeholder="Street, City, Country" required></textarea>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Password</label>
+                                <input type="password" name="Password" class="form-control border-secondary-subtle" placeholder="Minimum 8 characters" required />
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-secondary small mb-1">Confirm Password</label>
+                                <input type="password" name="ConfirmPassword" class="form-control border-secondary-subtle" placeholder="Repeat your password" required />
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 fw-bold py-2.5 rounded-2 shadow-sm mb-3 text-uppercase border-0" style="background-color: #3498db;">
+                                Register Account
+                            </button>
+
+                            <div class="text-center pt-2 border-top border-light">
+                                <span class="text-muted small">Already have an Account?</span>
+                                <a asp-controller="Registration" asp-action="Login" class="text-decoration-none small fw-bold ms-1" style="color: #3498db;">Login</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
