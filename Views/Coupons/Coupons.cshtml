@@ -1,0 +1,121 @@
+﻿@model DBConnection.Models.Coupon
+
+@{
+    ViewData["Title"] = "Coupon Management";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Create Coupon Entry</h5>
+                </div>
+                <div class="card-body">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-controller="Coupons" asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label asp-for="CourseID" class="form-label font-weight-bold">Select Target Course Subject</label>
+                            <select asp-for="CourseID" asp-items="ViewBag.CoursesDropdown" class="form-select" required>
+                                <option value="" disabled selected>-- Choose Subject --</option>
+                            </select>
+                            <span asp-validation-for="CourseID" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="code" class="form-label">Coupon Code</label>
+                            <input asp-for="code" class="form-control" placeholder="e.g., JAVA20" required />
+                            <span asp-validation-for="code" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="discount_type" class="form-label">Discount Type</label>
+                            <select asp-for="discount_type" class="form-select" required>
+                                <option value="" disabled selected>-- Choose Option --</option>
+                                <option value="percentage">percentage</option>
+                                <option value="fixed">fixed</option>
+                            </select>
+                            <span asp-validation-for="discount_type" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="discount_value" class="form-label">Discount Value</label>
+                            <input asp-for="discount_value" type="number" step="0.01" class="form-control" placeholder="e.g., 15.00" required />
+                            <span asp-validation-for="discount_value" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="expiry_date" class="form-label">Expiry Date</label>
+                            <input asp-for="expiry_date" type="date" class="form-control" required />
+                            <span asp-validation-for="expiry_date" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="status" class="form-label">Status</label>
+                            <select asp-for="status" class="form-select" required>
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="INACTIVE">INACTIVE</option>
+                            </select>
+                            <span asp-validation-for="status" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 mt-2">Save Coupon Code</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">System Coupons Records Database</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Target Subject</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>Expiry</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.CouponsList != null)
+                                {
+                                    foreach (var item in ViewBag.CouponsList)
+                                    {
+                                        <tr>
+                                            <td><strong>@item.code</strong></td>
+                                            <td><span class="text-primary font-weight-bold">@(item.Course != null ? item.Course.Subject : "N/A")</span></td>
+                                            <td>@item.discount_type</td>
+                                            <td>@item.discount_value</td>
+                                            <td>@item.expiry_date.ToString("yyyy-MM-dd")</td>
+                                            <td>
+                                                <span class="badge @(item.status == "ACTIVE" ? "bg-success" : "bg-danger")">
+                                                    @item.status
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
