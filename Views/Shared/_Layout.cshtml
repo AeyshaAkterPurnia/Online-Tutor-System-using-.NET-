@@ -1,0 +1,255 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Teacher Portal</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap_Flatty.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Practice_Teacher.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .full-width-nav {
+            width: 100%;
+            background-color: #2c3e50; 
+            z-index: 1050;
+            border-bottom: 4px solid #3498db; 
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .btn-nav-accent {
+            border: none;
+            border-radius: 0;
+            border-bottom: 2px solid transparent;
+            color: #fff !important;
+            transition: all 0.3s ease;
+        }
+
+            .btn-nav-accent:hover {
+                border-bottom: 2px solid #18bc9c; 
+                color: #18bc9c !important;
+            }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+            min-height: calc(100vh - 60px);
+        }
+
+        #sidebar {
+            min-width: 260px;
+            max-width: 260px;
+            background: #2c3e50;
+            color: #fff;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+            #sidebar .sidebar-header {
+                padding: 20px;
+                background: #1a252f;
+            }
+
+            #sidebar ul.components {
+                padding: 10px 0;
+            }
+
+            #sidebar ul li a {
+                padding: 12px 20px;
+                display: flex;
+                align-items: center;
+                color: #ecf0f1;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+                #sidebar ul li a:hover,
+                #sidebar ul li a.active,
+                #sidebar ul li a[aria-expanded="true"] {
+                    background: #1a252f;
+                    color: #18bc9c !important;
+                    border-bottom: 2px solid #18bc9c;
+                }
+
+            #sidebar a.dropdown-toggle::after {
+                display: inline-block;
+                margin-left: auto;
+                content: "\F285";
+                font-family: "bootstrap-icons";
+                transition: transform 0.3s;
+                border: none;
+            }
+
+            #sidebar a[aria-expanded="true"].dropdown-toggle::after {
+                transform: rotate(180deg);
+            }
+
+        .sub-menu {
+            background: #ffffff; 
+            list-style: none;
+            padding: 0;
+        }
+
+            .sub-menu li a {
+                padding-left: 55px !important; 
+                font-size: 0.9rem;
+                color: #2c3e50 !important; 
+                background: #ffffff !important;
+                border-bottom: 1px solid #dee2e6 !important; /* Light gray separator instead of white */
+                transition: all 0.2s ease;
+            }
+
+                .sub-menu li a:hover {
+                    color: #18bc9c !important; /* Turns teal on hover */
+                    padding-left: 60px !important; /* Slight slide effect */
+                    background: #f8f9fa !important; /* Very light gray highlight on hover */
+                }
+
+        /* Ensure the parent link remains dark to distinguish it from the white sub-menu */
+        #sidebar a[aria-expanded="true"] {
+            background: #1a252f;
+            color: #18bc9c !important;
+        }
+
+        /* --- 6. MAIN CONTENT AREA --- */
+        #content {
+            width: 100%;
+            padding: 30px;
+            background-color: #f8f9fa;
+            min-height: 100%;
+        }
+
+        #sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        #sidebar::-webkit-scrollbar-thumb {
+            background: #34495e;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark full-width-nav shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-mortarboard-fill me-2"></i>Teacher Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    
+                    <li class="nav-item me-3">
+                        <span class="navbar-text text-white">
+                            <i class="bi bi-hand-thumbs-up me-1 text-info"></i> Welcome,  
+                            @HttpContextAccessor.HttpContext?.Session.GetString("UserName") 
+                        </span>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link btn-nav-accent text-white px-3" asp-controller="Teacher" asp-action="Profile">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-2">
+                        <a asp-controller="Registration" asp-action="Login" class="btn btn-danger btn-sm shadow-sm text-white">
+                            Logout
+                        </a>
+                    </li>                   
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <nav id="sidebar" class="shadow">
+            <ul class="list-unstyled components mt-2">
+                <li>
+                    <a asp-controller="Teacher" asp-action="Dashboard">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#coursesSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-book me-2"></i> Courses
+                    </a>
+                    <ul class="collapse list-unstyled sub-menu" id="coursesSubmenu">
+                        <li><a asp-controller="Teacher" asp-action="ActiveCourse">Active Courses</a></li>
+                        <li><a asp-controller="Teacher" asp-action="AddGroup">Add Group</a></li>
+                        <li><a asp-controller="Teacher" asp-action="AddCourseDetails">Add Course Details</a></li>
+                        <li><a asp-controller="Teacher" asp-action="AddCourse">Add Course</a></li> 
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#addContent" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-book me-2"></i> Add Content
+                    </a>
+                    <ul class="collapse list-unstyled sub-menu" id="addContent">
+                        <li><a asp-controller="Teacher" asp-action="UploadVedio"><i class="bi bi-play-btn me-2"></i> Upload Video</a></li>
+                        <li><a asp-controller="Teacher" asp-action="UploadSlide"><i class="bi bi-file-earmark-ppt me-2"></i> Upload Slide</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a asp-controller="Teacher" asp-action="TrainerList">
+                    <i class="bi bi-people me-2"></i> Trainers
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-controller="Teacher" asp-action="StudentList">
+                       <i class="bi bi-people me-2"></i> Student
+                    </a>
+                 </li>
+
+                <li>
+                    <a asp-controller="Coupons" asp-action="Coupons">
+                        <i class="bi bi-tag me-2"></i> Coupons
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#settings" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                    <ul class="collapse list-unstyled sub-menu" id="settings">
+                        <li><a asp-controller="Teacher" asp-action="UpdateProfile">Update Profile</a></li>
+                        <li><a asp-controller="Teacher" asp-action="ChangePassword">Change Password</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="content">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
